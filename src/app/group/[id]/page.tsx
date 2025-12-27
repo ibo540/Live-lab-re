@@ -54,7 +54,7 @@ export default function StudentGroupPage() {
             selected_factor: selectedOption,
             justification,
             device_hash: deviceHash
-        });
+        } as any);
 
         if (!error) {
             setSubmitted(true);
