@@ -63,8 +63,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     }, [session?.id]); // Re-subscribe if ID changes (optimization needed later)
 
     const createSession = async (durationMinutes: number) => {
-        const { data, error } = await supabase
-            .from('sessions')
+        const { data, error } = await (supabase.from('sessions') as any)
             .insert({
                 status: 'active',
                 duration_seconds: durationMinutes * 60,
@@ -85,7 +84,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         if (!session) return;
         // Optimistic update for immediate UI feedback
         setSession({ ...session, status: 'finished' });
-        await supabase.from('sessions').update({ status: 'finished' }).eq('id', session.id);
+        await (supabase.from('sessions') as any).update({ status: 'finished' }).eq('id', session.id);
         // Do not clear session locally, so we can see results
     }
 

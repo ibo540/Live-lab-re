@@ -123,7 +123,7 @@ export default function PresenterPage() {
             setOptimisticPhase(phase);
 
             // Cast to any to bypass strict enum checks if 'results' is missing in types but present in DB
-            const { error } = await supabase.from('sessions').update({ current_phase: phase } as any).eq('id', session.id);
+            const { error } = await (supabase.from('sessions') as any).update({ current_phase: phase }).eq('id', session.id);
             if (error) {
                 setOptimisticPhase(null);
                 throw error;

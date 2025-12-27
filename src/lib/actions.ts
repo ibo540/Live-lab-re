@@ -10,7 +10,7 @@ export async function createGroupsForSession(sessionId: string) {
         group_number: index + 1
     }));
 
-    const { data, error } = await supabase.from('groups').insert(groupsToInsert).select();
+    const { data, error } = await (supabase.from('groups') as any).insert(groupsToInsert).select();
 
     if (error) {
         console.error('Error creating groups:', error);
