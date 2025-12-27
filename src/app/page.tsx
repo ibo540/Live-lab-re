@@ -175,7 +175,7 @@ export default function LandingPage() {
       </Card>
 
       <div className="absolute bottom-4 text-slate-600 text-sm">
-        Built for Comparative Politics • Next.js 14
+        Built for Comparative Politics
       </div>
     </main>
   );
