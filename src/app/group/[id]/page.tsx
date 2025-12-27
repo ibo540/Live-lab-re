@@ -29,7 +29,8 @@ export default function StudentGroupPage() {
             const { data: groupData } = await supabase.from('groups').select('*').eq('id', groupId).single();
             if (groupData) {
                 setGroup(groupData);
-                setMethod(METHODS[groupData.method_type]);
+                // Fix: Cast explicitly to keyof METHODS to satisfy TypeScript build
+                setMethod(METHODS[groupData.method_type as keyof typeof METHODS]);
 
                 // Check if already submitted (simple local check for demo, real implementations should check DB)
                 const isSubmitted = localStorage.getItem(`submitted_${groupId}`);
