@@ -160,14 +160,14 @@ export const METHODS: Record<string, MethodScenario> = {
         question: 'Which condition or combination leads to lateness?',
         cases: [
             // Simplified Truth Table Representation
-            { id: '1', label: 'Row 1', conditions: { A: false, C: false, D: false }, outcome: false },
-            { id: '2', label: 'Row 2', conditions: { A: false, C: false, D: true }, outcome: true },
-            { id: '3', label: 'Row 3', conditions: { A: false, C: true, D: false }, outcome: false },
-            { id: '4', label: 'Row 4', conditions: { A: false, C: true, D: true }, outcome: true }, // D is sufficient?
-            { id: '5', label: 'Row 5', conditions: { A: true, C: false, D: false }, outcome: false },
-            { id: '6', label: 'Row 6', conditions: { A: true, C: false, D: true }, outcome: true },
-            { id: '7', label: 'Row 7', conditions: { A: true, C: true, D: false }, outcome: true }, // A + C also causes it?
-            { id: '8', label: 'Row 8', conditions: { A: true, C: true, D: true }, outcome: true },
+            { id: '1', label: 'Row 1', conditions: { 'A (Morning Class)': false, 'C (Back-to-Back)': false, 'D (Dept. Meeting)': false }, outcome: false },
+            { id: '2', label: 'Row 2', conditions: { 'A (Morning Class)': false, 'C (Back-to-Back)': false, 'D (Dept. Meeting)': true }, outcome: true },
+            { id: '3', label: 'Row 3', conditions: { 'A (Morning Class)': false, 'C (Back-to-Back)': true, 'D (Dept. Meeting)': false }, outcome: false },
+            { id: '4', label: 'Row 4', conditions: { 'A (Morning Class)': false, 'C (Back-to-Back)': true, 'D (Dept. Meeting)': true }, outcome: true },
+            { id: '5', label: 'Row 5', conditions: { 'A (Morning Class)': true, 'C (Back-to-Back)': false, 'D (Dept. Meeting)': false }, outcome: false },
+            { id: '6', label: 'Row 6', conditions: { 'A (Morning Class)': true, 'C (Back-to-Back)': false, 'D (Dept. Meeting)': true }, outcome: true },
+            { id: '7', label: 'Row 7', conditions: { 'A (Morning Class)': true, 'C (Back-to-Back)': true, 'D (Dept. Meeting)': false }, outcome: true }, // A + C also causes it?
+            { id: '8', label: 'Row 8', conditions: { 'A (Morning Class)': true, 'C (Back-to-Back)': true, 'D (Dept. Meeting)': true }, outcome: true },
         ],
         options: [
             'Meeting (D) is the only cause',

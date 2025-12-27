@@ -11,6 +11,7 @@ interface SessionContextType {
     loading: boolean;
     createSession: (duration: number) => Promise<string | null>;
     endSession: () => Promise<void>;
+    clearSession: () => void;
 }
 
 const SessionContext = createContext<SessionContextType>({
@@ -18,6 +19,7 @@ const SessionContext = createContext<SessionContextType>({
     loading: true,
     createSession: async () => null,
     endSession: async () => { },
+    clearSession: () => { },
 });
 
 export const useSession = () => useContext(SessionContext);
@@ -64,7 +66,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         const { data, error } = await supabase
             .from('sessions')
             .insert({
-                status: 'waiting',
+                status: 'active',
                 duration_seconds: durationMinutes * 60,
                 current_phase: 'intro'
             })
@@ -81,12 +83,18 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
     const endSession = async () => {
         if (!session) return;
+        // Optimistic update for immediate UI feedback
+        setSession({ ...session, status: 'finished' });
         await supabase.from('sessions').update({ status: 'finished' }).eq('id', session.id);
+        // Do not clear session locally, so we can see results
+    }
+
+    const clearSession = () => {
         setSession(null);
     }
 
     return (
-        <SessionContext.Provider value={{ session, loading, createSession, endSession }}>
+        <SessionContext.Provider value={{ session, loading, createSession, endSession, clearSession }}>
             {children}
         </SessionContext.Provider>
     );

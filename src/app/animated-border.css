@@ -1,0 +1,79 @@
+@layer utilities {
+    .animated-border {
+        position: relative;
+    }
+
+    .animated-border::before,
+    .animated-border::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid #fbbf24;
+        /* Amber-400 to match theme */
+        transition: all 0.5s;
+        animation: clipMe 8s linear infinite;
+        z-index: -1;
+        border-radius: 0.75rem;
+        /* rounded-xl */
+    }
+
+    .animated-border::before {
+        animation-delay: -4s;
+    }
+
+    /* Hover effect from snippet */
+    .animated-border:hover::before,
+    .animated-border:hover::after {
+        border-color: #f59e0b;
+        /* Amber-500 */
+        background-color: rgba(251, 191, 36, 0.1);
+    }
+}
+
+@keyframes clipMe {
+
+    0%,
+    100% {
+        clip-path: inset(0 0 98% 0);
+    }
+
+    /* Top Edge */
+    25% {
+        clip-path: inset(0 98% 0 0);
+    }
+
+    /* Right Edge (Corrected to Clockwise for better feel, or match snippet Left?) Snippet was Top->Left. unique. Let's do Clockwise: Top->Right->Bottom->Left */
+    /* Wait, user snippet:
+     0: Top
+     25: Left (w=2px)
+     50: Bottom
+     75: Right
+     This is Counter-Clockwise? Or just weird order.
+     Let's do standard Clockwise Snake.
+  */
+    0% {
+        clip-path: inset(0 0 98% 0);
+    }
+
+    25% {
+        clip-path: inset(0 0 0 98%);
+    }
+
+    /* Right */
+    50% {
+        clip-path: inset(98% 0 0 0);
+    }
+
+    /* Bottom */
+    75% {
+        clip-path: inset(0 98% 0 0);
+    }
+
+    /* Left */
+    100% {
+        clip-path: inset(0 0 98% 0);
+    }
+}

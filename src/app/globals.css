@@ -118,7 +118,72 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  /* Force hide cursor on everything to let CustomCursor shine */
+  html,
+  body,
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
   }
+}
+
+@layer utilities {
+  .animated-border {
+    position: relative;
+  }
+
+  .animated-border::before,
+  .animated-border::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #fbbf24;
+    /* Amber-400 */
+    transition: all 0.5s;
+    animation: clipMe 4s linear infinite;
+    /* Speed up to 4s for visibility */
+    z-index: -1;
+    border-radius: 0.75rem;
+  }
+
+  .animated-border::before {
+    animation-delay: -2s;
+    /* Half of 4s */
+  }
+
+  .animated-border:hover::before,
+  .animated-border:hover::after {
+    border-color: #f59e0b;
+    background-color: rgba(251, 191, 36, 0.1);
+  }
+}
+
+@keyframes clipMe {
+
+  0%,
+  100% {
+    clip-path: inset(0 0 98% 0);
+  }
+
+  /* Top */
+  25% {
+    clip-path: inset(0 0 0 98%);
+  }
+
+  /* Right */
+  50% {
+    clip-path: inset(98% 0 0 0);
+  }
+
+  /* Bottom */
+  75% {
+    clip-path: inset(0 98% 0 0);
+  }
+
+  /* Left */
 }

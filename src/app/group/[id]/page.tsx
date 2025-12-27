@@ -115,7 +115,7 @@ export default function StudentGroupPage() {
                     {method.cases.map((c) => (
                         <Card key={c.id} className="bg-slate-900 border-slate-800 overflow-hidden">
                             <CardHeader className="bg-slate-800/50 pb-2">
-                                <CardTitle className="text-base flex justify-between items-center">
+                                <CardTitle className="text-base flex justify-between items-center text-white">
                                     {c.label}
                                     {/* Outcome Badge */}
                                     <span className={c.outcome ? "text-red-400 text-sm" : "text-green-400 text-sm"}>
@@ -156,7 +156,7 @@ export default function StudentGroupPage() {
                             <Label>One sentence justification</Label>
                             <Textarea
                                 placeholder="I chose this because..."
-                                className="bg-slate-950 border-slate-700 focus:border-indigo-500"
+                                className="bg-slate-950 border-slate-700 focus:border-indigo-500 text-white placeholder:text-slate-400"
                                 value={justification}
                                 onChange={(e) => setJustification(e.target.value)}
                             />

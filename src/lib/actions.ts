@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 
 export async function createGroupsForSession(sessionId: string) {
-    const methods = ['difference', 'agreement', 'nested', 'qca'];
+    const methods = ['difference', 'agreement', 'nested', 'qca'] as const;
 
     // Create one group for each method
     const groupsToInsert = methods.map((method, index) => ({
