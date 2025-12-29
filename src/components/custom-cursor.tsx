@@ -88,7 +88,7 @@ export function CustomCursor() {
     return (
         <div
             ref={cursorRef}
-            className={`fixed top-0 left-0 pointer-events-none z-[9999] transition-all duration-100 ease-out will-change-transform flex items-center justify-center
+            className={`hidden md:flex fixed top-0 left-0 pointer-events-none z-[9999] transition-all duration-100 ease-out will-change-transform items-center justify-center
         ${isHovering ? 'w-[50px] h-[50px] border-[3px] opacity-100' : 'w-[45px] h-[45px] border-[2px] opacity-100'}
         border-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.4)]`}
         >
