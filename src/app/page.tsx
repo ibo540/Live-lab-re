@@ -174,8 +174,10 @@ export default function LandingPage() {
         </CardContent>
       </Card>
 
-      <div className="absolute bottom-4 text-slate-600 text-sm">
-        Built for Comparative Politics
+      <div className="absolute bottom-6 flex flex-col items-center gap-1 z-20">
+        <div className="text-slate-500 text-sm font-medium tracking-wide">
+          Designed & Built by <span className="text-indigo-400 font-semibold hover:text-indigo-300 transition-colors cursor-default">Ibrahim Al-ksibati</span>
+        </div>
       </div>
     </main>
   );
