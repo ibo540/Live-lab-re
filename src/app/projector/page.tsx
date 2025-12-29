@@ -156,9 +156,9 @@ export default function ProjectorPage() {
                                                 {method.title}
                                             </CardTitle>
                                         </CardHeader>
-                                        <div className="p-0 flex-1 overflow-auto">
+                                        <div className="p-0 flex-1 overflow-auto bg-black/20">
                                             <table className="w-full text-xs text-left">
-                                                <thead className="bg-white/5 text-slate-400 uppercase tracking-wider font-semibold">
+                                                <thead className="bg-indigo-500/10 text-indigo-200 uppercase tracking-wider font-bold font-outfit">
                                                     <tr>
                                                         <th className="p-3 pl-4">Case</th>
                                                         <th className="p-3">Key Conditions</th>
@@ -168,17 +168,17 @@ export default function ProjectorPage() {
                                                 <tbody className="divide-y divide-white/5">
                                                     {method.cases.map(c => (
                                                         <tr key={c.id} className="hover:bg-white/5 transition-colors">
-                                                            <td className="p-3 pl-4 font-mono text-slate-500 font-bold">{c.label}</td>
+                                                            <td className="p-3 pl-4 font-medium text-slate-300">{c.label}</td>
                                                             <td className="p-3">
                                                                 <div className="flex flex-wrap gap-1.5">
                                                                     {Object.entries(c.conditions).map(([k, v]) => (
-                                                                        v && <span key={k} className="px-2 py-0.5 rounded bg-indigo-500/20 border border-indigo-500/30 text-indigo-200 text-[10px] whitespace-nowrap">{k}</span>
+                                                                        v && <span key={k} className="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-200 text-[10px] whitespace-nowrap shadow-[0_0_8px_rgba(99,102,241,0.1)]">{k}</span>
                                                                     ))}
                                                                     {Object.values(c.conditions).every(v => !v) && <span className="text-slate-600 italic">None</span>}
                                                                 </div>
                                                             </td>
                                                             <td className="p-3 pr-4 text-right">
-                                                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${c.outcome ? "bg-red-500/20 text-red-300 border border-red-500/30" : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"}`}>
+                                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${c.outcome ? "bg-red-500/20 text-red-300 border-red-500/30" : "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"}`}>
                                                                     {c.outcome ? "YES" : "NO"}
                                                                 </span>
                                                             </td>

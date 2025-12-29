@@ -235,9 +235,15 @@ export default function PresenterPage() {
                 </div>
 
                 <div className="flex gap-3 bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-4 shadow-xl">
-                    <Button onClick={() => updatePhase('results')} className="bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 border-0">
-                        Show Results
-                    </Button>
+                    {displayPhase === 'results' ? (
+                        <Button onClick={() => updatePhase('work')} className="bg-slate-700 hover:bg-slate-600 text-white shadow-lg border border-white/10">
+                            Hide Results
+                        </Button>
+                    ) : (
+                        <Button onClick={() => updatePhase('results')} className="bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 border-0">
+                            Show Results
+                        </Button>
+                    )}
                     <Button variant="destructive" onClick={handleEndSession} className="shadow-lg shadow-red-900/20 border border-red-800/50">
                         End Session
                     </Button>
@@ -288,29 +294,29 @@ export default function PresenterPage() {
                                                 </div>
 
                                                 {/* Large Table */}
-                                                <div className="rounded-xl border border-white/10 overflow-hidden shadow-lg">
-                                                    <table className="w-full text-base text-left">
-                                                        <thead className="bg-slate-900/90 text-slate-300 font-bold uppercase tracking-wider">
+                                                <div className="rounded-xl border border-white/5 overflow-hidden shadow-2xl bg-black/20">
+                                                    <table className="w-full text-sm text-left">
+                                                        <thead className="bg-indigo-500/10 text-indigo-200 font-bold uppercase tracking-wider text-xs font-outfit">
                                                             <tr>
                                                                 <th className="p-4 pl-6">Case</th>
                                                                 <th className="p-4">Key Conditions</th>
                                                                 <th className="p-4 pr-6 text-right">Late?</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody className="divide-y divide-white/5 bg-slate-900/40 text-slate-200">
+                                                        <tbody className="divide-y divide-white/5 bg-transparent text-slate-200">
                                                             {method.cases.map(c => (
-                                                                <tr key={c.id} className="hover:bg-white/5 transition-colors">
-                                                                    <td className="p-4 pl-6 font-mono font-bold text-slate-400">{c.label}</td>
+                                                                <tr key={c.id} className="hover:bg-white/5 transition-colors group">
+                                                                    <td className="p-4 pl-6 font-medium text-white group-hover:text-indigo-200 transition-colors">{c.label}</td>
                                                                     <td className="p-4">
                                                                         <div className="flex flex-wrap gap-2">
                                                                             {Object.entries(c.conditions).map(([k, v]) => (
-                                                                                v && <span key={k} className="px-3 py-1 rounded-md bg-white/10 text-white text-sm border border-white/5 shadow-sm">{k}</span>
+                                                                                v && <span key={k} className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-200 text-xs border border-indigo-500/20 shadow-[0_0_10px_rgba(99,102,241,0.1)]">{k}</span>
                                                                             ))}
-                                                                            {Object.values(c.conditions).every(v => !v) && <span className="text-slate-500 italic">None</span>}
+                                                                            {Object.values(c.conditions).every(v => !v) && <span className="text-slate-500 italic text-xs">None</span>}
                                                                         </div>
                                                                     </td>
                                                                     <td className="p-4 pr-6 text-right">
-                                                                        <span className={`px-3 py-1 rounded-lg text-sm font-bold border ${c.outcome ? "bg-red-500/20 text-red-300 border-red-500/30" : "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"}`}>
+                                                                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${c.outcome ? "bg-red-500/20 text-red-300 border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]"}`}>
                                                                             {c.outcome ? "YES" : "NO"}
                                                                         </span>
                                                                     </td>
