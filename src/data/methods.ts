@@ -118,9 +118,9 @@ export const METHODS: Record<string, MethodScenario> = {
     nested: {
         id: 'nested',
         title: 'Nested Case Design',
-        description: 'Two events within the same day/context. Most variables controlled.',
-        scenarioText: 'On a single Tuesday, two different events occurred at the university. Even though they happened on the same day in the same building, one event started late and the other started on time. Compare the specific conditions of these two events.',
-        question: 'Which factor explains the difference between the two events?',
+        description: 'Combine Large-N statistical data with Small-N in-depth case studies.',
+        scenarioText: 'A researcher is studying why university events sometimes start late over the semester. Most events take place under similar conditions and start on time.\n\nOn a single Tuesday, two events occurred in the same building under identical logistical and environmental conditions. One event started late and the other started on time. The researcher selects these two events for closer, within-case analysis.\n\nThe tables below summarize the observable conditions of each event.',
+        question: 'Based on a nested case design, which element should the researcher analyze within the cases to understand why the outcomes differ?',
         cases: [
             {
                 id: 'e1',
@@ -149,8 +149,14 @@ export const METHODS: Record<string, MethodScenario> = {
                 outcome: false,
             },
         ],
-        options: ['Faculty Meeting', 'Projector Setup', 'Building Location', 'Weather', 'Catered Lunch'],
-        correctAnswer: 'Faculty Meeting',
+        options: [
+            'The presence of a faculty meeting as a differing variable',
+            'The decision-making sequence and coordination process before each event',
+            'The building location where the events occurred',
+            'Weather conditions on the day of the events',
+            'Whether catering was provided'
+        ],
+        correctAnswer: 'The decision-making sequence and coordination process before each event',
     },
     qca: {
         id: 'qca',
