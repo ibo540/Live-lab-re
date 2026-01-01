@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 // TouchTexture Class
@@ -356,139 +356,172 @@ interface LiquidGradientProps {
 export function LiquidGradient({ colors, speed = 1.5 }: LiquidGradientProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const touchTextureRef = useRef<TouchTexture | null>(null);
+    const [webGLError, setWebGLError] = useState(false);
 
     useEffect(() => {
-        if (!containerRef.current) return;
+        if (!containerRef.current || webGLError) return;
 
-        // Scene setup
-        const renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            powerPreference: "high-performance",
-            alpha: false,
-            stencil: false,
-            depth: false
-        });
-
-        // Size management
-        const width = containerRef.current.clientWidth;
-        const height = containerRef.current.clientHeight;
-
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        containerRef.current.appendChild(renderer.domElement);
-
-        const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
-        camera.position.z = 50;
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0e27);
-
-        const clock = new THREE.Clock();
-
-        // Default Colors (Navy/Orange)
-        const defaultColors = {
-            color1: '#F15A22',
-            color2: '#0a0e27',
-            color3: '#F15A22',
-            color4: '#0a0e27',
-            color5: '#F15A22',
-            color6: '#0a0e27'
-        };
-
-        const activeColors = colors || defaultColors;
-
-        // Uniforms
-        const uniforms = {
-            uTime: { value: 0 },
-            uResolution: { value: new THREE.Vector2(width, height) },
-            uColor1: { value: hexToVec3(activeColors.color1) },
-            uColor2: { value: hexToVec3(activeColors.color2) },
-            uColor3: { value: hexToVec3(activeColors.color3) },
-            uColor4: { value: hexToVec3(activeColors.color4) },
-            uColor5: { value: hexToVec3(activeColors.color5) },
-            uColor6: { value: hexToVec3(activeColors.color6) },
-            uSpeed: { value: speed },
-            uIntensity: { value: 1.8 },
-            uTouchTexture: { value: null },
-            uGrainIntensity: { value: 0.08 },
-            uZoom: { value: 1.0 },
-            uDarkNavy: { value: new THREE.Vector3(0.039, 0.055, 0.153) },
-            uGradientSize: { value: 0.45 },
-            uGradientCount: { value: 12.0 },
-            uColor1Weight: { value: 0.5 },
-            uColor2Weight: { value: 1.8 }
-        };
-
-        const touchTexture = new TouchTexture();
-        touchTextureRef.current = touchTexture;
-
-        // @ts-ignore
-        uniforms.uTouchTexture.value = touchTexture.texture;
-
-        // View Size helper
-        const getViewSize = () => {
-            const fovInRadians = (camera.fov * Math.PI) / 180;
-            const h = Math.abs(camera.position.z * Math.tan(fovInRadians / 2) * 2);
-            return { width: h * camera.aspect, height: h };
-        };
-
-        const sceneManager = { scene, getViewSize };
-        const gradientBg = new GradientBackground(sceneManager, uniforms);
-        gradientBg.init();
-
-        // Event Listeners
-        const onMouseMove = (e: MouseEvent) => {
-            // Calculate mouse position relative to container
-            if (!containerRef.current) return;
-            const rect = containerRef.current.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width;
-            const y = 1 - (e.clientY - rect.top) / rect.height;
-            touchTexture.addTouch({ x, y });
-        };
-
-        const onResize = () => {
-            if (!containerRef.current) return;
-            const w = containerRef.current.clientWidth;
-            const h = containerRef.current.clientHeight;
-
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-            renderer.setSize(w, h);
-            gradientBg.onResize(w, h);
-        };
-
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('resize', onResize);
-
-        // Animation Loop
+        let renderer: THREE.WebGLRenderer;
+        let scene: THREE.Scene;
+        let camera: THREE.PerspectiveCamera;
         let animationId: number;
-        const animate = () => {
-            const delta = clock.getDelta();
-            const clampedDelta = Math.min(delta, 0.1);
+        let cleanupFunctions: (() => void)[] = [];
 
-            touchTexture.update();
-            gradientBg.update(clampedDelta);
+        try {
+            // Scene setup
+            renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                powerPreference: "high-performance",
+                alpha: false,
+                stencil: false,
+                depth: false
+            });
 
-            renderer.render(scene, camera);
-            animationId = requestAnimationFrame(animate);
-        };
+            // Size management
+            const width = containerRef.current.clientWidth;
+            const height = containerRef.current.clientHeight;
 
-        // Start
-        animate();
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            containerRef.current.appendChild(renderer.domElement);
+
+            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+            camera.position.z = 50;
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0e27);
+
+            const clock = new THREE.Clock();
+
+            // Default Colors (Navy/Orange)
+            const defaultColors = {
+                color1: '#F15A22',
+                color2: '#0a0e27',
+                color3: '#F15A22',
+                color4: '#0a0e27',
+                color5: '#F15A22',
+                color6: '#0a0e27'
+            };
+
+            const activeColors = colors || defaultColors;
+
+            // Uniforms
+            const uniforms = {
+                uTime: { value: 0 },
+                uResolution: { value: new THREE.Vector2(width, height) },
+                uColor1: { value: hexToVec3(activeColors.color1) },
+                uColor2: { value: hexToVec3(activeColors.color2) },
+                uColor3: { value: hexToVec3(activeColors.color3) },
+                uColor4: { value: hexToVec3(activeColors.color4) },
+                uColor5: { value: hexToVec3(activeColors.color5) },
+                uColor6: { value: hexToVec3(activeColors.color6) },
+                uSpeed: { value: speed },
+                uIntensity: { value: 1.8 },
+                uTouchTexture: { value: null },
+                uGrainIntensity: { value: 0.08 },
+                uZoom: { value: 1.0 },
+                uDarkNavy: { value: new THREE.Vector3(0.039, 0.055, 0.153) },
+                uGradientSize: { value: 0.45 },
+                uGradientCount: { value: 12.0 },
+                uColor1Weight: { value: 0.5 },
+                uColor2Weight: { value: 1.8 }
+            };
+
+            const touchTexture = new TouchTexture();
+            touchTextureRef.current = touchTexture;
+
+            // @ts-ignore
+            uniforms.uTouchTexture.value = touchTexture.texture;
+
+            // View Size helper
+            const getViewSize = () => {
+                const fovInRadians = (camera.fov * Math.PI) / 180;
+                const h = Math.abs(camera.position.z * Math.tan(fovInRadians / 2) * 2);
+                return { width: h * camera.aspect, height: h };
+            };
+
+            const sceneManager = { scene, getViewSize };
+            const gradientBg = new GradientBackground(sceneManager, uniforms);
+            gradientBg.init();
+
+            // Event Listeners
+            const onMouseMove = (e: MouseEvent) => {
+                // Calculate mouse position relative to container
+                if (!containerRef.current) return;
+                const rect = containerRef.current.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width;
+                const y = 1 - (e.clientY - rect.top) / rect.height;
+                touchTexture.addTouch({ x, y });
+            };
+
+            const onResize = () => {
+                if (!containerRef.current) return;
+                const w = containerRef.current.clientWidth;
+                const h = containerRef.current.clientHeight;
+
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+                gradientBg.onResize(w, h);
+            };
+
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('resize', onResize);
+            cleanupFunctions.push(() => {
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('resize', onResize);
+            });
+
+            // Animation Loop
+            const animate = () => {
+                const delta = clock.getDelta();
+                const clampedDelta = Math.min(delta, 0.1);
+
+                touchTexture.update();
+                gradientBg.update(clampedDelta);
+
+                renderer.render(scene, camera);
+                animationId = requestAnimationFrame(animate);
+            };
+
+            // Start
+            animate();
+            cleanupFunctions.push(() => cancelAnimationFrame(animationId));
+
+        } catch (e) {
+            console.error("WebGL Initialization failed, falling back to CSS gradient:", e);
+            setWebGLError(true);
+        }
 
         // Cleanup
         return () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('resize', onResize);
-            cancelAnimationFrame(animationId);
+            cleanupFunctions.forEach(fn => fn());
 
-            if (containerRef.current && containerRef.current.contains(renderer.domElement)) {
-                containerRef.current.removeChild(renderer.domElement);
+            if (renderer) {
+                if (containerRef.current && containerRef.current.contains(renderer.domElement)) {
+                    containerRef.current.removeChild(renderer.domElement);
+                }
+                renderer.dispose();
             }
-
-            renderer.dispose();
         };
-    }, [colors, speed]);
+    }, [colors, speed, webGLError]);
+
+    if (webGLError) {
+        // Fallback CSS Gradient
+        const activeColors = colors || {
+            color1: '#F15A22',
+            color2: '#0a0e27'
+        };
+        return (
+            <div
+                className="fixed top-0 left-0 w-full h-full z-0 bg-slate-950"
+                style={{
+                    background: `radial-gradient(circle at center, ${activeColors.color1} 0%, ${activeColors.color2} 100%)`,
+                    opacity: 0.8
+                }}
+            />
+        );
+    }
 
     return (
         <div
