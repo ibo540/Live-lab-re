@@ -96,32 +96,68 @@ export default function ProjectorPage() {
                     {(session.current_phase === 'intro' || session.current_phase === 'qr') && (
                         <motion.div
                             key="intro"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, y: -50 }}
+                            initial="hidden"
+                            animate="visible"
+                            exit={{ opacity: 0, scale: 0.9 }}
                             className="grid grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-[90vw]"
                         >
-                            {groups.map((group) => (
-                                <Card
-                                    key={group.id}
-                                    onClick={() => window.open(`${origin}/group/${group.id}`, '_blank')}
-                                    className="bg-white/5 backdrop-blur-xl border-white/10 p-8 flex flex-col items-center text-center space-y-6 shadow-2xl cursor-pointer hover:bg-white/10 transition-colors"
-                                    title="Click to open Student View (Test Mode)"
-                                >
-                                    <h2 className="text-3xl font-bold text-white mb-2">Group {group.group_number}</h2>
-                                    <div className="bg-white p-4 rounded-xl shadow-lg">
-                                        <QRCodeSVG
-                                            value={`${origin}/group/${group.id}`}
-                                            size={220}
-                                            level={'H'}
-                                            includeMargin={true}
-                                        />
-                                    </div>
-                                    <p className="text-xl font-medium text-slate-200 opacity-90">
-                                        {METHODS[group.method_type]?.title}
-                                    </p>
-                                </Card>
-                            ))}
+                            {groups.map((group, i) => {
+                                // Deterministic "random" entrance based on index
+                                const entrance = [
+                                    { x: -800, y: -500, rotate: -45 }, // Top-Left
+                                    { x: 800, y: -500, rotate: 45 },   // Top-Right
+                                    { x: -800, y: 500, rotate: -15 },  // Bottom-Left
+                                    { x: 800, y: 500, rotate: 15 },    // Bottom-Right
+                                ][i % 4];
+
+                                return (
+                                    <motion.div
+                                        key={group.id}
+                                        variants={{
+                                            hidden: {
+                                                opacity: 0,
+                                                scale: 0.5,
+                                                ...entrance
+                                            },
+                                            visible: {
+                                                opacity: 1,
+                                                scale: 1,
+                                                x: 0,
+                                                y: 0,
+                                                rotate: 0,
+                                                transition: {
+                                                    type: "spring",
+                                                    damping: 15,
+                                                    stiffness: 100,
+                                                    delay: i * 0.15
+                                                }
+                                            }
+                                        }}
+                                        className="h-full"
+                                    >
+                                        <Card
+                                            onClick={() => window.open(`${origin}/group/${group.id}`, '_blank')}
+                                            className="bg-white/5 backdrop-blur-xl border-white/10 p-8 flex flex-col items-center text-center space-y-6 shadow-2xl cursor-pointer hover:bg-white/10 transition-colors h-full justify-between"
+                                            title="Click to open Student View (Test Mode)"
+                                        >
+                                            <div className="space-y-4 w-full flex flex-col items-center">
+                                                <h2 className="text-3xl font-bold text-white mb-2">Group {group.group_number}</h2>
+                                                <div className="bg-white p-4 rounded-xl shadow-lg inline-block">
+                                                    <QRCodeSVG
+                                                        value={`${origin}/group/${group.id}`}
+                                                        size={220}
+                                                        level={'H'}
+                                                        includeMargin={true}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <p className="text-xl font-medium text-slate-200 opacity-90 leading-tight">
+                                                {METHODS[group.method_type]?.title.split(':')[0]}
+                                            </p>
+                                        </Card>
+                                    </motion.div>
+                                );
+                            })}
                             {groups.length === 0 && <p className="text-center w-full col-span-4 text-2xl animate-pulse">Generating Group Access...</p>}
                         </motion.div>
                     )}
