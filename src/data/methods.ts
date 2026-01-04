@@ -3,6 +3,7 @@ export type Case = {
     label: string;
     conditions: Record<string, boolean>;
     outcome: boolean;
+    stats?: { noProtest: number; protest: number; };
 };
 
 export type MethodScenario = {
@@ -166,27 +167,26 @@ export const METHODS: Record<string, MethodScenario> = {
     },
     qca: {
         id: 'qca',
-        title: 'Qualitative Comparative Analysis (QCA)',
-        description: 'Analyze combinations of conditions.',
-        scenarioText: 'We have collected data from 8 different days. Lateness seems complex—it might not be just one cause, but a combination of factors. Look at the truth table below to find which combination of conditions consistently leads to the professor being late.',
-        question: 'Which condition or combination leads to lateness?',
+        title: 'Qualitative Comparative Analysis (QCA): Student Protests',
+        description: 'Analyze combinations of conditions to find consistent causal paths.',
+        scenarioText: 'A university wants to understand why student protests occur on campus. Administrators believe protests do not result from a single factor, but from specific combinations of conditions.\n\nData are collected across multiple academic terms. Instead of analyzing individual cases one by one, the observations are grouped into combinations of conditions. Each combination shows how often protests occurred or did not occur under that configuration.\n\nThree conditions are examined:\n\n**A. Tuition Increase**\nYes. Tuition fees increased during the term\nNo. No tuition increase\n\n**B. Student Mobilization Capacity**\nYes. Active and organized student groups exist\nNo. Weak or fragmented student organization\n\n**C. Trust in University Administration**\nYes. Majority of students trust the administration\nNo. No majority trust',
+        question: 'Based on the truth table and the minimized causal paths, which statement best reflects the QCA finding about student protests?',
         cases: [
-            // Simplified Truth Table Representation
-            { id: '1', label: 'Row 1', conditions: { 'A (Morning Class)': false, 'C (Back-to-Back)': false, 'D (Dept. Meeting)': false }, outcome: false },
-            { id: '2', label: 'Row 2', conditions: { 'A (Morning Class)': false, 'C (Back-to-Back)': false, 'D (Dept. Meeting)': true }, outcome: true },
-            { id: '3', label: 'Row 3', conditions: { 'A (Morning Class)': false, 'C (Back-to-Back)': true, 'D (Dept. Meeting)': false }, outcome: false },
-            { id: '4', label: 'Row 4', conditions: { 'A (Morning Class)': false, 'C (Back-to-Back)': true, 'D (Dept. Meeting)': true }, outcome: true },
-            { id: '5', label: 'Row 5', conditions: { 'A (Morning Class)': true, 'C (Back-to-Back)': false, 'D (Dept. Meeting)': false }, outcome: false },
-            { id: '6', label: 'Row 6', conditions: { 'A (Morning Class)': true, 'C (Back-to-Back)': false, 'D (Dept. Meeting)': true }, outcome: true },
-            { id: '7', label: 'Row 7', conditions: { 'A (Morning Class)': true, 'C (Back-to-Back)': true, 'D (Dept. Meeting)': false }, outcome: true }, // A + C also causes it?
-            { id: '8', label: 'Row 8', conditions: { 'A (Morning Class)': true, 'C (Back-to-Back)': true, 'D (Dept. Meeting)': true }, outcome: true },
+            { id: '1', label: '1', conditions: { 'A (Tuition Increase)': false, 'B (Student Mobilization)': false, 'C (Trust in Administration)': true }, outcome: false, stats: { noProtest: 3, protest: 0 } },
+            { id: '2', label: '2', conditions: { 'A (Tuition Increase)': false, 'B (Student Mobilization)': false, 'C (Trust in Administration)': false }, outcome: false, stats: { noProtest: 2, protest: 0 } },
+            { id: '3', label: '3', conditions: { 'A (Tuition Increase)': false, 'B (Student Mobilization)': true, 'C (Trust in Administration)': true }, outcome: false, stats: { noProtest: 1, protest: 0 } },
+            { id: '4', label: '4', conditions: { 'A (Tuition Increase)': false, 'B (Student Mobilization)': true, 'C (Trust in Administration)': false }, outcome: true, stats: { noProtest: 0, protest: 2 } },
+            { id: '5', label: '5', conditions: { 'A (Tuition Increase)': true, 'B (Student Mobilization)': false, 'C (Trust in Administration)': true }, outcome: false, stats: { noProtest: 2, protest: 0 } },
+            { id: '6', label: '6', conditions: { 'A (Tuition Increase)': true, 'B (Student Mobilization)': false, 'C (Trust in Administration)': false }, outcome: true, stats: { noProtest: 1, protest: 1 } },
+            { id: '7', label: '7', conditions: { 'A (Tuition Increase)': true, 'B (Student Mobilization)': true, 'C (Trust in Administration)': true }, outcome: true, stats: { noProtest: 0, protest: 1 } },
+            { id: '8', label: '8', conditions: { 'A (Tuition Increase)': true, 'B (Student Mobilization)': true, 'C (Trust in Administration)': false }, outcome: true, stats: { noProtest: 0, protest: 5 } },
         ],
         options: [
-            'Meeting (D) is the only cause',
-            'Morning (A) AND Back-to-Back (C)',
-            'Either Meeting (D) OR (Morning (A) AND Back-to-Back (C))',
-            'No clear pattern'
+            'Student protests occur whenever tuition increases, regardless of other conditions.',
+            'Student protests occur only when trust in the administration is low.',
+            'Student protests occur when student mobilization is present together with either low trust in the administration or a tuition increase.',
+            'Student protests occur only when all three conditions are present at the same time.'
         ],
-        correctAnswer: 'Either Meeting (D) OR (Morning (A) AND Back-to-Back (C))'
-    }
+        correctAnswer: 'Student protests occur when student mobilization is present together with either low trust in the administration or a tuition increase.',
+    },
 };
