@@ -135,7 +135,7 @@ export const METHODS: Record<string, MethodScenario> = {
             },
             {
                 id: 'n2',
-                label: 'Computer Eng',
+                label: 'Computer Engineering',
                 conditions: {
                     'Class Size (Large)': true,
                     'Student Org Strength (Strong)': false,

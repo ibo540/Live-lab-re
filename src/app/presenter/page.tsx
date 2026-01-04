@@ -303,7 +303,7 @@ export default function PresenterPage() {
                                                                     <th className="p-4 border-b border-white/5">Nested Case<br /><span className="normal-case opacity-50 text-[10px]">(Faculty)</span></th>
                                                                     <th className="p-4 border-b border-white/5 w-1/4">Controlled Factors<br /><span className="normal-case opacity-50 text-[10px]">(Already Nested)</span></th>
                                                                     <th className="p-4 border-b border-white/5">Class Size</th>
-                                                                    <th className="p-4 border-b border-white/5">Student Org Strength</th>
+                                                                    <th className="p-4 border-b border-white/5">Student Organization Strength</th>
                                                                     <th className="p-4 pr-6 border-b border-white/5 text-right">Student Protest</th>
                                                                 </tr>
                                                             </thead>
