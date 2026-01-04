@@ -288,7 +288,7 @@ export default function PresenterPage() {
                                                 </div>
 
                                                 <div className="bg-slate-800/30 p-6 rounded-2xl border border-white/5 mb-8">
-                                                    <p className="text-slate-200 text-xl leading-relaxed italic border-l-4 border-indigo-500 pl-6">
+                                                    <p className="text-slate-200 text-xl leading-relaxed italic border-l-4 border-indigo-500 pl-6 whitespace-pre-wrap">
                                                         "{method.scenarioText || method.question}"
                                                     </p>
                                                 </div>

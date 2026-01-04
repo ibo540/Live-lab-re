@@ -105,7 +105,7 @@ export default function StudentGroupPage() {
                     </span>
                     <h1 className="text-2xl font-bold">{method.title}</h1>
                     <p className="text-slate-400 text-sm">{method.description}</p>
-                    <div className="bg-slate-900/50 p-4 rounded-lg border border-white/5 text-left text-sm text-slate-200 leading-relaxed shadow-inner">
+                    <div className="bg-slate-900/50 p-4 rounded-lg border border-white/5 text-left text-sm text-slate-200 leading-relaxed shadow-inner whitespace-pre-wrap">
                         <span className="text-indigo-400 font-bold block mb-1">SCENARIO:</span>
                         {method.scenarioText}
                     </div>
