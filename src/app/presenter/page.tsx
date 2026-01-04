@@ -294,37 +294,74 @@ export default function PresenterPage() {
                                                 </div>
 
                                                 {/* Large Table */}
-                                                <div className="rounded-xl border border-white/5 overflow-hidden shadow-2xl bg-black/20">
-                                                    <table className="w-full text-sm text-left">
-                                                        <thead className="bg-indigo-500/10 text-indigo-200 font-bold uppercase tracking-wider text-xs font-outfit">
-                                                            <tr>
-                                                                <th className="p-4 pl-6">Case</th>
-                                                                <th className="p-4">Key Conditions</th>
-                                                                <th className="p-4 pr-6 text-right">Late?</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody className="divide-y divide-white/5 bg-transparent text-slate-200">
-                                                            {method.cases.map(c => (
-                                                                <tr key={c.id} className="hover:bg-white/5 transition-colors group">
-                                                                    <td className="p-4 pl-6 font-medium text-white group-hover:text-indigo-200 transition-colors">{c.label}</td>
-                                                                    <td className="p-4">
-                                                                        <div className="flex flex-wrap gap-2">
-                                                                            {Object.entries(c.conditions).map(([k, v]) => (
-                                                                                v && <span key={k} className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-200 text-xs border border-indigo-500/20 shadow-[0_0_10px_rgba(99,102,241,0.1)]">{k}</span>
-                                                                            ))}
-                                                                            {Object.values(c.conditions).every(v => !v) && <span className="text-slate-500 italic text-xs">None</span>}
-                                                                        </div>
-                                                                    </td>
-                                                                    <td className="p-4 pr-6 text-right">
-                                                                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${c.outcome ? "bg-red-500/20 text-red-300 border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]"}`}>
-                                                                            {c.outcome ? "YES" : "NO"}
-                                                                        </span>
-                                                                    </td>
+                                                {method.id === 'nested' ? (
+                                                    <div className="rounded-xl border border-white/5 overflow-hidden shadow-2xl bg-black/20">
+                                                        <table className="w-full text-sm text-left">
+                                                            <thead className="bg-indigo-500/10 text-indigo-200 font-bold uppercase tracking-wider text-xs font-outfit">
+                                                                <tr>
+                                                                    <th className="p-4 pl-6 border-b border-white/5">Larger Case<br /><span className="normal-case opacity-50 text-[10px]">(Nested Context)</span></th>
+                                                                    <th className="p-4 border-b border-white/5">Nested Case<br /><span className="normal-case opacity-50 text-[10px]">(Faculty)</span></th>
+                                                                    <th className="p-4 border-b border-white/5 w-1/4">Controlled Factors<br /><span className="normal-case opacity-50 text-[10px]">(Already Nested)</span></th>
+                                                                    <th className="p-4 border-b border-white/5">Class Size</th>
+                                                                    <th className="p-4 border-b border-white/5">Student Org Strength</th>
+                                                                    <th className="p-4 pr-6 border-b border-white/5 text-right">Student Protest</th>
                                                                 </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-white/5 bg-transparent text-slate-200">
+                                                                {method.cases.map(c => (
+                                                                    <tr key={c.id} className="hover:bg-white/5 transition-colors group">
+                                                                        <td className="p-4 pl-6 text-slate-400">Same University</td>
+                                                                        <td className="p-4 font-medium text-white group-hover:text-indigo-200 transition-colors">{c.label}</td>
+                                                                        <td className="p-4 text-xs text-slate-500 leading-relaxed max-w-[200px]">
+                                                                            Attendance policy, tuition fees, exam rules, grading system, university leadership
+                                                                        </td>
+                                                                        <td className="p-4 text-slate-400">Large</td>
+                                                                        <td className="p-4 text-slate-400">
+                                                                            {c.conditions['Student Org Strength (Strong)'] ? 'Strong' : 'Weak'}
+                                                                        </td>
+                                                                        <td className="p-4 pr-6 text-right">
+                                                                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${c.outcome ? "bg-red-500/20 text-red-300 border-red-500/30" : "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"}`}>
+                                                                                {c.outcome ? "YES" : "NO"}
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                ) : (
+                                                    <div className="rounded-xl border border-white/5 overflow-hidden shadow-2xl bg-black/20">
+                                                        <table className="w-full text-sm text-left">
+                                                            <thead className="bg-indigo-500/10 text-indigo-200 font-bold uppercase tracking-wider text-xs font-outfit">
+                                                                <tr>
+                                                                    <th className="p-4 pl-6">Case</th>
+                                                                    <th className="p-4">Key Conditions</th>
+                                                                    <th className="p-4 pr-6 text-right">Late?</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-white/5 bg-transparent text-slate-200">
+                                                                {method.cases.map(c => (
+                                                                    <tr key={c.id} className="hover:bg-white/5 transition-colors group">
+                                                                        <td className="p-4 pl-6 font-medium text-white group-hover:text-indigo-200 transition-colors">{c.label}</td>
+                                                                        <td className="p-4">
+                                                                            <div className="flex flex-wrap gap-2">
+                                                                                {Object.entries(c.conditions).map(([k, v]) => (
+                                                                                    v && <span key={k} className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-200 text-xs border border-indigo-500/20 shadow-[0_0_10px_rgba(99,102,241,0.1)]">{k}</span>
+                                                                                ))}
+                                                                                {Object.values(c.conditions).every(v => !v) && <span className="text-slate-500 italic text-xs">None</span>}
+                                                                            </div>
+                                                                        </td>
+                                                                        <td className="p-4 pr-6 text-right">
+                                                                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${c.outcome ? "bg-red-500/20 text-red-300 border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "bg-emerald-500/20 text-emerald-300 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]"}`}>
+                                                                                {c.outcome ? "YES" : "NO"}
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             {/* Right: Results & Analysis (Span 2) */}
