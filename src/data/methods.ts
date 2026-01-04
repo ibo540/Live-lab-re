@@ -117,46 +117,52 @@ export const METHODS: Record<string, MethodScenario> = {
     },
     nested: {
         id: 'nested',
-        title: 'Nested Case Design',
-        description: 'Combine Large-N statistical data with Small-N in-depth case studies.',
-        scenarioText: 'A researcher is studying why university events sometimes start late over the semester. Most events take place under similar conditions and start on time.\n\nOn a single Tuesday, two events occurred in the same building under identical logistical and environmental conditions. One event started late and the other started on time. The researcher selects these two events for closer, within-case analysis.\n\nThe tables below summarize the observable conditions of each event.',
-        question: 'Based on a nested case design, which element should the researcher analyze within the cases to understand why the outcomes differ?',
+        title: 'Nested Case Design: Faculties Nested Within One University',
+        description: 'Comparison of sub-units (faculties) within the same larger unit (university) to control for institutional factors.',
+        scenarioText: 'A large public university introduces a new attendance policy that affects eligibility for course credit. The policy applies equally to all faculties. Tuition fees, grading rules, exam schedules, university leadership, and disciplinary procedures are identical across the university.\n\nIn the semester following the policy change, a student protest occurs in one faculty. No protest occurs in two other faculties.\n\nA researcher seeks to explain why the protest occurred in only one faculty. The university is treated as the larger case. Faculties are treated as cases nested within the same institutional context.',
+        question: 'Based on the table, which factor best explains why students protested in the Agriculture faculty?',
         cases: [
             {
-                id: 'e1',
-                label: 'Event 1 (Late)',
+                id: 'n1',
+                label: 'Business Admin',
                 conditions: {
-                    FacultyMeeting: true,
-                    ProjectorSetup: true,
-                    BuildingC: true,
-                    // Noise
-                    CateredLunch: true,
-                    Rainy: false
-                },
-                outcome: true,
-            },
-            {
-                id: 'e2',
-                label: 'Event 2 (On Time)',
-                conditions: {
-                    FacultyMeeting: false,
-                    ProjectorSetup: true,
-                    BuildingC: true,
-                    // Noise
-                    CateredLunch: true,
-                    Rainy: false
+                    'Class Size (Large)': true,
+                    'Student Org Strength (Strong)': false,
+                    'Attendance Policy (New)': true,
+                    'University Leadership': true
                 },
                 outcome: false,
             },
+            {
+                id: 'n2',
+                label: 'Computer Eng',
+                conditions: {
+                    'Class Size (Large)': true,
+                    'Student Org Strength (Strong)': false,
+                    'Attendance Policy (New)': true,
+                    'University Leadership': true
+                },
+                outcome: false,
+            },
+            {
+                id: 'n3',
+                label: 'Agriculture',
+                conditions: {
+                    'Class Size (Large)': true,
+                    'Student Org Strength (Strong)': true, // This is the differing factor
+                    'Attendance Policy (New)': true,
+                    'University Leadership': true
+                },
+                outcome: true, // Protest Occurred
+            }
         ],
         options: [
-            'The presence of a faculty meeting as a differing variable',
-            'The decision-making sequence and coordination process before each event',
-            'The building location where the events occurred',
-            'Weather conditions on the day of the events',
-            'Whether catering was provided'
+            'Class size',
+            'Attendance policy',
+            'Student organization strength',
+            'University leadership'
         ],
-        correctAnswer: 'The decision-making sequence and coordination process before each event',
+        correctAnswer: 'Student organization strength',
     },
     qca: {
         id: 'qca',
