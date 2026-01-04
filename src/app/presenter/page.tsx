@@ -356,6 +356,33 @@ export default function PresenterPage() {
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    <div className="rounded-xl border border-white/5 overflow-hidden shadow-2xl bg-black/20 mt-8">
+                                                        <table className="w-full text-sm text-left">
+                                                            <thead className="bg-indigo-500/10 text-indigo-200 font-bold uppercase tracking-wider text-xs font-outfit">
+                                                                <tr>
+                                                                    <th className="p-4 pl-6 border-b border-white/5">Combination #</th>
+                                                                    <th className="p-4 border-b border-white/5">A (Tuition Increase)</th>
+                                                                    <th className="p-4 border-b border-white/5">B (Student Mobilization)</th>
+                                                                    <th className="p-4 border-b border-white/5">C (Trust in Administration)</th>
+                                                                    <th className="p-4 border-b border-white/5 text-right">NO PROTEST (cases)</th>
+                                                                    <th className="p-4 pr-6 border-b border-white/5 text-right">PROTEST (cases)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-white/5 bg-transparent text-slate-200">
+                                                                {method.cases.filter(c => (c.stats?.noProtest === 0 && (c.stats?.protest ?? 0) > 0)).map(c => (
+                                                                    <tr key={c.id} className="hover:bg-white/5 transition-colors group">
+                                                                        <td className="p-4 pl-6 font-medium text-white group-hover:text-indigo-200 transition-colors">{c.label}</td>
+                                                                        <td className="p-4 text-slate-400">{c.conditions['A (Tuition Increase)'] ? 'Yes' : 'No'}</td>
+                                                                        <td className="p-4 text-slate-400">{c.conditions['B (Student Mobilization)'] ? 'Yes' : 'No'}</td>
+                                                                        <td className="p-4 text-slate-400">{c.conditions['C (Trust in Administration)'] ? 'Yes' : 'No'}</td>
+                                                                        <td className="p-4 text-right font-mono text-slate-500">{c.stats?.noProtest ?? 0}</td>
+                                                                        <td className="p-4 pr-6 text-right font-mono text-white font-bold">{c.stats?.protest ?? 0}</td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <p className="mt-4 text-lg text-white font-medium">These are the only combinations where protests always occurred.</p>
                                                 ) : (
                                                     <div className="rounded-xl border border-white/5 overflow-hidden shadow-2xl bg-black/20">
                                                         <table className="w-full text-sm text-left">
