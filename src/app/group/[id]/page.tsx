@@ -112,31 +112,73 @@ export default function StudentGroupPage() {
                 </div>
 
                 {/* Scenario/Cases Display */}
-                <div className="grid gap-4">
-                    {method.cases.map((c) => (
-                        <Card key={c.id} className="bg-slate-900 border-slate-800 overflow-hidden">
-                            <CardHeader className="bg-slate-800/50 pb-2">
-                                <CardTitle className="text-base flex justify-between items-center text-white">
-                                    {c.label}
-                                    {/* Outcome Badge */}
-                                    <span className={c.outcome ? "text-red-400 text-sm" : "text-green-400 text-sm"}>
-                                        {c.outcome ? "LATE (Yes)" : "ON TIME (No)"}
-                                    </span>
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-4 space-y-2 text-sm">
-                                {Object.entries(c.conditions).map(([key, value]) => (
-                                    <div key={key} className="flex justify-between border-b border-white/5 py-1 last:border-0">
-                                        <span className="text-slate-400">{key}</span>
-                                        <span className={value ? "text-white font-medium" : "text-slate-600"}>
-                                            {value ? "Yes" : "No"}
+                {method.id === 'nested' ? (
+                    <div className="rounded-xl border border-white/10 overflow-hidden bg-slate-900/50 shadow-2xl">
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-sm">
+                                <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-xs font-semibold">
+                                    <tr>
+                                        <th className="p-4 border-b border-white/10">Larger Case<br /><span className="normal-case opacity-50">(Nested Context)</span></th>
+                                        <th className="p-4 border-b border-white/10">Nested Case<br /><span className="normal-case opacity-50">(Faculty)</span></th>
+                                        <th className="p-4 border-b border-white/10 w-1/3">Controlled Factors<br /><span className="normal-case opacity-50">(Already Nested)</span></th>
+                                        <th className="p-4 border-b border-white/10">Class Size</th>
+                                        <th className="p-4 border-b border-white/10">Student Organization Strength</th>
+                                        <th className="p-4 border-b border-white/10">Student Protest</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-white/5">
+                                    {method.cases.map((c) => (
+                                        <tr key={c.id} className="hover:bg-white/5 transition-colors">
+                                            <td className="p-4 text-slate-300">Same University</td>
+                                            <td className="p-4 font-medium text-white">{c.label}</td>
+                                            <td className="p-4 text-slate-400 text-xs leading-relaxed">
+                                                Attendance policy, tuition fees, exam rules, grading system, university leadership
+                                            </td>
+                                            <td className="p-4 text-slate-300">Large</td>
+                                            <td className="p-4 text-slate-300">
+                                                {c.conditions['Student Org Strength (Strong)'] ? 'Strong' : 'Weak'}
+                                            </td>
+                                            <td className="p-4">
+                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${c.outcome
+                                                        ? 'bg-red-500/10 text-red-400 border border-red-500/20'
+                                                        : 'bg-green-500/10 text-green-400 border border-green-500/20'
+                                                    }`}>
+                                                    {c.outcome ? 'Yes' : 'No'}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="grid gap-4">
+                        {method.cases.map((c) => (
+                            <Card key={c.id} className="bg-slate-900 border-slate-800 overflow-hidden">
+                                <CardHeader className="bg-slate-800/50 pb-2">
+                                    <CardTitle className="text-base flex justify-between items-center text-white">
+                                        {c.label}
+                                        {/* Outcome Badge */}
+                                        <span className={c.outcome ? "text-red-400 text-sm" : "text-green-400 text-sm"}>
+                                            {c.outcome ? "LATE (Yes)" : "ON TIME (No)"}
                                         </span>
-                                    </div>
-                                ))}
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="p-4 space-y-2 text-sm">
+                                    {Object.entries(c.conditions).map(([key, value]) => (
+                                        <div key={key} className="flex justify-between border-b border-white/5 py-1 last:border-0">
+                                            <span className="text-slate-400">{key}</span>
+                                            <span className={value ? "text-white font-medium" : "text-slate-600"}>
+                                                {value ? "Yes" : "No"}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                )}
 
                 {/* Question Form */}
                 <Card className="bg-indigo-900/10 border-indigo-500/30">
